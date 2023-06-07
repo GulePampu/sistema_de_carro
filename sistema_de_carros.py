@@ -1,5 +1,5 @@
 carros = {'civic': [{'Marca': 'honda', 'Modelo': 'civic', 'Ano': '1993', 'Cor': 'branco', 'Quilometragem': '200000 km', 'Preço': 'R$ 23,480.00'}]}
-carro_cadastro = {'Marca': None, 'Modelo': None, 'Ano': None, 'Cor': None, 'Quilometragem': None, 'Preço': None}
+carro_cadastro = {'Marca': 'Sem cadastro', 'Modelo': 'Sem cadastro', 'Ano': 'Sem cadastro', 'Cor': 'Sem cadastro', 'Quilometragem': 'Sem cadastro', 'Preço': 'Sem cadastro'}
 
 
 def menu_principal():
@@ -20,7 +20,7 @@ def menu_principal():
 
 
 def set_defalut():
-    return {'Marca': None, 'Modelo': None, 'Ano': None, 'Cor': None, 'Quilometragem': None, 'Preço': None}
+    return {'Marca': 'Sem cadastro', 'Modelo': 'Sem cadastro', 'Ano': 'Sem cadastro', 'Cor': 'Sem cadastro', 'Quilometragem': 'Sem cadastro', 'Preço': 'Sem cadastro'}
 
 
 def menu_cadastro(carro_cadastro):
@@ -41,11 +41,13 @@ def menu_cadastro(carro_cadastro):
         elif menu == '7':
             concluir_cadastro(carro_cadastro, carro_cadastro['Modelo'])
             carro_cadastro = set_defalut()
-            print(carros)
-            menu_cadastro(carro_cadastro)
+            menu_principal()
         elif menu == '8':
             carro_cadastro = set_defalut()
             menu_principal()
+        else:
+            print('Opção Inválida')
+            menu_cadastro(carro_cadastro)
     else:
         print('Opção Inválida')
         menu_cadastro(carro_cadastro)
@@ -115,18 +117,17 @@ def cadastrar_preco(preco):
         return menu_cadastro(carro_cadastro)
 
 
-def concluir_cadastro(carro_cadastro, modelo):
-    if modelo == None:
-        print('Informe um modelo! ')
-        menu_cadastro(carro_cadastro)
+def concluir_cadastro(carrocadastro, modelo):
+    if 'Sem cadastro' in carrocadastro.values():
+        print('Complete o cadastro! ')
+        menu_cadastro(carrocadastro)
     else:
+        print('Veiculo Cadastrado!')
         for i in carros:
             if i.lower() != modelo.lower():
-                carros.update({modelo: carro_cadastro})
-                break
+                return carros.update({modelo: [dict(carrocadastro)]})
             elif i.lower() == modelo.lower():
-                carros[modelo].append(carro_cadastro)
-                break
+                return carros[modelo].append(carrocadastro)
 
 
 def menu_buscar():
@@ -154,7 +155,7 @@ def buscar_carro_modelo(modelo_busca):
     carros_encontrados = []
     for modelos, cadastro in carros.items():
         for carro in cadastro:
-            if carro['Modelo'].lower() == modelo_busca.lower():
+            if carro['Modelo'] == modelo_busca:
                 carros_encontrados.append(carro)
     if len(carros_encontrados) == 0:
         print('Modelo não encontrado!')
@@ -168,7 +169,7 @@ def buscar_carro_marca(marca_busca):
     carros_encontrados = []
     for modelos, cadastro in carros.items():
         for carro in cadastro:
-            if carro['Marca'].lower() == marca_busca.lower():
+            if carro['Marca'] == marca_busca:
                 carros_encontrados.append(carro)
     if len(carros_encontrados) == 0:
         print('Marca não encontrada!')
